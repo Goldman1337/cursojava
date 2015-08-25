@@ -36,4 +36,9 @@ public class loanController {
 		l = loandao.get(key);
 		return l;
 	}
+	
+	public boolean update(Loan l) {
+		boolean rta = loandao.update(l);
+		return rta;
+	}
 }

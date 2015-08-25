@@ -12,6 +12,7 @@ public class personDao implements genericDao<Person> {
 	
 	// SQL CRUD Statements.
 	private final String SQL_INSERT = "INSERT INTO persons (namePerson, telephonePerson) VALUES (?, ?)";
+	private final String SQL_UPDATE = "UPDATE persons SET namePerson = ?, telephonePerson = ? WHERE idPerson = ? ";
 	private final String SQL_DELETE = "DELETE FROM persons WHERE idPerson = ?";
 	private final String SQL_GET_ALL = "SELECT * FROM persons";
 	private final String SQL_GET = "SELECT * FROM persons WHERE ( idPerson = ?)";
@@ -39,7 +40,23 @@ public class personDao implements genericDao<Person> {
 	}
 
 	public boolean update(Person c) {
-		// Not Implemented.
+		PreparedStatement ps;
+		
+		try {
+			ps = conn.getConn().prepareStatement(SQL_UPDATE);
+
+			ps.setString(1, c.getNamePerson());
+			ps.setString(2, c.getTelephonePerson());
+			ps.setInt(3, c.getIdPerson());
+			
+			if(ps.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			conn.closeConnection();
+		}
 		return false;
 	}
 

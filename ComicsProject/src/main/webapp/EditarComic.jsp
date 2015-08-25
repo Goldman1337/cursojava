@@ -27,7 +27,7 @@ if(ComicEdit!=null){
 Nombre:<br><input type="Text" name="Nombre" value="<%=NombreComic%>"><br>
 Compañia:<br><input type="Text" name="Comp" value="<%=Compañia %>"><br>
 Cantidad: <br><input type="Text" name="Cantidad" value ="<%=Cantidad %>"><br>
-Review: <br><textarea rows="4" cols="50" name="Review" value="<%=Review%>"></textarea>
+Review: <br><textarea rows="4" cols="50" name="Review"><%=Review%></textarea>
 <br><input type="submit" value="Submit">
 </form>
 </body>

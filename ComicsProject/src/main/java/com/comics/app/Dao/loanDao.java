@@ -13,9 +13,10 @@ import com.comics.app.Model.Person;
 public class loanDao implements genericDao<Loan> {
 
 	private final String SQL_INSERT = "INSERT INTO loans (Persons_idPerson, Comics_idComic, date) VALUES (?, ?, ?)";
+	private final String SQL_UPDATE = "UPDATE loans SET Persons_idPerson = ?, Comics_idComic = ?, date = ? WHERE idLoan = ? ";
 	private final String SQL_GET_ALL = "select idLoan, c.nameComic, p.namePerson, l.date from  loans l join comics c on l.Comics_idComic = c.idComic join persons p on l.Persons_idPerson = p.idPerson ";
 	private final String SQL_DELETE = "DELETE FROM loans WHERE idLoan = ?";
-	private final String SQL_GET = "SELECT * FROM loans WHERE ( idLoan = ?)";
+	private final String SQL_GET = "select idLoan, c.nameComic, p.namePerson, l.date from  loans l join comics c on l.Comics_idComic = c.idComic join persons p on l.Persons_idPerson = p.idPerson WHERE ( idLoan = ?)";
 	
 	private final connectionDB conn = connectionDB.getConnection();
 	
@@ -41,7 +42,23 @@ public class loanDao implements genericDao<Loan> {
 	}
 
 	public boolean update(Loan c) {
-		// TODO Auto-generated method stub
+PreparedStatement ps;
+		
+		try {
+			ps = conn.getConn().prepareStatement(SQL_UPDATE);
+			ps.setInt(1, c.getPerson().getIdPerson());
+			ps.setInt(2, c.getComic().getIdComic());
+			ps.setString(3, c.getDate());
+			ps.setInt(4, c.getIdLoan());
+			
+			if(ps.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			conn.closeConnection();
+		}
 		return false;
 	}
 
@@ -75,9 +92,20 @@ public class loanDao implements genericDao<Loan> {
 			ps = conn.getConn().prepareStatement(SQL_GET);
 			ps.setInt(1, (Integer)key);
 			
+			Comic c = new Comic();
+			Person p = new Person();
+			
 			res = ps.executeQuery();
 			while(res.next()) {
 				l.setIdLoan(res.getInt("idLoan"));
+
+				c.setNameComic(res.getString("nameComic"));
+				l.setComic(c);
+
+				p.setNamePerson(res.getString("namePerson"));
+				l.setPerson(p);
+
+				l.setDate(res.getString("date"));
 			}
 					
 		} catch (SQLException e) {
@@ -105,12 +133,12 @@ public class loanDao implements genericDao<Loan> {
 				
 				Loan l = new Loan();
 				l.setIdLoan(res.getInt("idLoan"));
-				
-				l.setComic(c);
+
 				c.setNameComic(res.getString("nameComic"));
-				
-				l.setPerson(p);
+				l.setComic(c);
+
 				p.setNamePerson(res.getString("namePerson"));
+				l.setPerson(p);
 
 				l.setDate(res.getString("date"));
 				
