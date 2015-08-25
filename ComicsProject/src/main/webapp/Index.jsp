@@ -7,6 +7,6 @@
 </head>
 <body>
 <br>
-<%pageContext.forward("/ComicServlet?action=listComic"); %>
+<a href="ComicServlet?action=listComic">Lista de Comics</a>
 </body>
 </html>
