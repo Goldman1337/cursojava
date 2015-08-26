@@ -14,8 +14,8 @@
 <thead>
 <tr>
 <th>Fecha</th>
-<th>Comic</th>
 <th>Persona</th>
+<th>Comic</th>
 </tr>
 </thead>
 <tbody>
@@ -24,8 +24,8 @@ for(Loan loan : Lista){
 %>
 <tr>
 <td><%=loan.getDate() %></td>
-<td><%=loan.getComic().getNameComic() %></td>
 <td><%=loan.getPerson().getNamePerson() %></td>
+<td><%=loan.getComic().getNameComic() %></td>
 <td><a href="LoanServlet?action=edit&LoanId=<%=loan.getIdLoan() %>">Editar</a></td>
 <td><a href="LoanServlet?action=delete&LoanId=<%=loan.getIdLoan()%>">Eliminar</a></td>
 <%} %>

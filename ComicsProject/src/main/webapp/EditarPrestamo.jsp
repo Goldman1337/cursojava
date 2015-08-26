@@ -19,6 +19,7 @@ String ComicId="";
 String PersonaId="";
 String FechaPrestamo = "";
 if(PrestamoEdit!=null){
+	PrestamoId=String.valueOf(PrestamoEdit.getIdLoan());
 	PersonaId=String.valueOf(PrestamoEdit.getPerson());
 	ComicId=String.valueOf(PrestamoEdit.getComic().getIdComic());
 	FechaPrestamo=PrestamoEdit.getDate();
@@ -27,21 +28,23 @@ if(PrestamoEdit!=null){
 <input type="Hidden" name="LoanId" value="<%=PrestamoId %>">
 Persona:<br>
 <select name="PersonId">
-<%for(Person per : listaPersona){
-%>
+<%for(Person per : listaPersona){%>
 	<option value="<%=per.getIdPerson()%>" > <%=per.getNamePerson() %></option>
 <%} %>
 </select><br>
 <!--<input type="Text" name="Nombre" value=""><br> -->
 Comic:<br>
 <select name="ComicId">
-<%for(Comic com : listaComic){
-%>
-	<option value="<%=com.getIdComic()%>" > <%=com.getNameComic() %></option>
-<%} %>
+	<%for(Comic com : listaComic){%>
+ 	<%if(String.valueOf(com.getIdComic())==ComicId){%>
+ 	<option value="<%=com.getIdComic()%>" selected> <%=com.getNameComic() %></option>
+ 	<%}else{%>
+	<option value="<%=com.getIdComic()%>"> <%=com.getNameComic() %></option>
+	<%} %>
+	<%} %>
 </select><br>
 <!-- <input type="Text" name="Tel" value=""><br> -->
-Fecha:<br><input type="date" name="Date" value="<%=FechaPrestamo %>"><br>
+Fecha:<br><input required type="date" name="Date" value="<%=FechaPrestamo %>"><br>
 <br><input type="submit" value="Submit">
 </form>
 </body>

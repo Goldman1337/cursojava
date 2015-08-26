@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.comics.app.Controller.*;
-import com.comics.app.Dao.*;
 import com.comics.app.Model.*;
 
 /**

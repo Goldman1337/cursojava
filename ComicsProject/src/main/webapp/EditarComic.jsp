@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@page import="com.comics.app.Model.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -24,9 +24,9 @@ if(ComicEdit!=null){
 }%>
 <form method="POST" action="ComicServlet" name="frmAddComic">
 <input type="Hidden" name="ComicId" value="<%=ComicId %>">
-Nombre:<br><input type="Text" name="Nombre" value="<%=NombreComic%>"><br>
+Nombre:<br><input required type="Text" name="Nombre" value="<%=NombreComic%>"><br>
 Compañia:<br><input type="Text" name="Comp" value="<%=Compañia %>"><br>
-Cantidad: <br><input type="Text" name="Cantidad" value ="<%=Cantidad %>"><br>
+Cantidad: <br><input required type="Number" name="Cantidad" value ="<%=Cantidad %>"><br>
 Review: <br><textarea rows="4" cols="50" name="Review"><%=Review%></textarea>
 <br><input type="submit" value="Submit">
 </form>
