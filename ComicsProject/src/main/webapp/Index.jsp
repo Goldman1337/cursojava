@@ -12,5 +12,7 @@
 <a href="PersonServlet?action=listPerson">Lista de Personas</a>
 <br>
 <a href="LoanServlet?action=listLoan">Lista de Prestamos</a>
+<br>
+<a href="RoleServlet?action=listRole">Lista de Roles</a>
 </body>
 </html>

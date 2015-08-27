@@ -9,13 +9,6 @@ public class personController {
 	
 	personDao persondao = new personDao();
 	
-	public boolean login(String username, String password) {
-		if (username.equals("Sheldon") && password.equals("Bazzinga")) {
-			return true;
-		}
-		return false;
-	}
-	
 	public boolean add(Person c) {
 		boolean rta = persondao.add(c);
 		return rta;

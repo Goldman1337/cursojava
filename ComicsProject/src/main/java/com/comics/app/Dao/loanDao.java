@@ -79,42 +79,6 @@ PreparedStatement ps;
 		}
 		return false;
 	}
-
-//	public Loan get(Object key) {
-//		Loan l = new Loan();
-//		
-//		try {
-//			
-//			PreparedStatement ps;
-//			ResultSet res;
-//			
-//			ps = conn.getConn().prepareStatement(SQL_GET);
-//			ps.setInt(1, (Integer)key);
-//			
-//			res = ps.executeQuery();
-//			while(res.next()) {
-//				Comic c = new Comic();
-//				Person p = new Person();
-//				l.setIdLoan(res.getInt("idLoan"));
-//
-//				c.setIdComic(res.getInt("idComic"));
-//				c.setNameComic(res.getString("nameComic"));
-//				l.setComic(c);
-//				
-//				p.setIdPerson(res.getInt("idPerson"));
-//				p.setNamePerson(res.getString("namePerson"));
-//				l.setPerson(p);
-//				
-//				l.setDate(res.getString("date"));
-//			}
-//					
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			conn.closeConnection();
-//		}
-//		return l;
-//	}
 	public Loan get(Object key) {
 	 	Loan l = new Loan();
 	 	try {
