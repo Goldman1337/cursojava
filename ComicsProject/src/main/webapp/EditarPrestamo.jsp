@@ -12,14 +12,14 @@
 <body>
 <h1>Nuevo/Editar</h1>
 <% Loan PrestamoEdit =(Loan) request.getAttribute("loan");
-String PrestamoId ="";
+Integer PrestamoId =0;
 List<Person> listaPersona = new personController().getAll();
 List<Comic> listaComic = new comicController().getAll();
 Integer ComicId=0;
 Integer PersonaId=0;
 String FechaPrestamo = "";
 if(PrestamoEdit!=null){
-	PrestamoId=String.valueOf(PrestamoEdit.getIdLoan());
+	PrestamoId=PrestamoEdit.getIdLoan();
 	PersonaId=PrestamoEdit.getPerson().getIdPerson();
 	ComicId=PrestamoEdit.getComic().getIdComic();
 	FechaPrestamo=PrestamoEdit.getDate();

@@ -74,15 +74,15 @@ public class PersonServlet extends HttpServlet {
 		}
 		per.setNamePerson(Nombre);
 		per.setTelephonePerson(Telefono);
-		String Personid = request.getParameter("PersonId");
+		Integer Personid = Integer.parseInt(request.getParameter("PersonId"));
 		
 		if (messages.isEmpty()) {
-			if(Personid==null||Personid.isEmpty()){
+			if(Personid==null||Personid==0){
 				dao.add(per);
 			}
 			else
 			{
-				per.setIdPerson(Integer.parseInt(Personid));
+				per.setIdPerson(Personid);
 				dao.update(per);
 			}
 			request.setAttribute("messages", messages);
@@ -90,7 +90,7 @@ public class PersonServlet extends HttpServlet {
 			request.setAttribute("persons",dao.getAll());
 			view.forward(request,response);
 		}else{
-			per.setIdPerson(Integer.parseInt(Personid));
+			per.setIdPerson(Personid);
 			request.setAttribute("person",per);
 	        request.setAttribute("messages", messages);
 	        request.getRequestDispatcher("EditarPersona.jsp?PersonId="+Personid).forward(request, response); 

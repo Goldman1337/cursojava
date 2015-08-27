@@ -67,7 +67,7 @@ public class LoanServlet extends HttpServlet {
 		Comic ComicLoan= new comicController().get(Integer.parseInt(request.getParameter("ComicId")));
 		Person PersonLoan =new personController().get( Integer.parseInt(request.getParameter("PersonId")));
 		String dateprestamo=request.getParameter("Date");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date FechaPrestamo= new Date();
 		try {
 			FechaPrestamo = sdf.parse(dateprestamo);
@@ -76,13 +76,8 @@ public class LoanServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		Date FechaHoy= new Date();
-		try {
-			FechaHoy = sdf.parse(new Date().toString());
-		} catch (ParseException e) {
-			messages="error al inicializar la fecha del prestamo";
-			e.printStackTrace();
-		}
-		if(ComicLoan.getQuantityComic() < new loanController().getAll().stream()
+		
+		if(ComicLoan.getQuantityComic() <= new loanController().getAll().stream()
 				.filter(x->x.getComic().getIdComic()==ComicLoan.getIdComic()).count()){
 			messages="el comic no tiene ejemplares disponibles para el prestamo";
 		}
@@ -92,14 +87,14 @@ public class LoanServlet extends HttpServlet {
 		loan.setComic(ComicLoan);
 		loan.setPerson(PersonLoan);
 		loan.setDate(dateprestamo);
-		String Loanid = request.getParameter("LoanId");
+		Integer Loanid = Integer.parseInt(request.getParameter("LoanId"));
 		if (messages.isEmpty()) {
-			if(Loanid==null||Loanid.isEmpty()){
+			if(Loanid==null||Loanid==0){
 				dao.addLoan(loan.getComic(), loan.getPerson(), loan.getDate());
 			}
 			else
 			{
-				loan.setIdLoan(Integer.parseInt(Loanid));
+				loan.setIdLoan(Loanid);
 				dao.update(loan);
 			}
 			request.setAttribute("messages", messages);
@@ -107,7 +102,7 @@ public class LoanServlet extends HttpServlet {
 			request.setAttribute("loans",dao.getAll());
 			view.forward(request,response);
 		}else{
-			loan.setIdLoan(Integer.parseInt(Loanid));
+			loan.setIdLoan(Loanid);
 			request.setAttribute("loan",loan);
 	        request.setAttribute("messages", messages);
 	        request.getRequestDispatcher("EditarPrestamo.jsp?PrestamoId="+Loanid).forward(request, response); 

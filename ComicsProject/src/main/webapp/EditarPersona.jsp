@@ -10,11 +10,11 @@
 <body>
 <h1>Nueva/Editar</h1>
 <% Person PersonaEdit =(Person) request.getAttribute("person");
-String PersonaId="";
+Integer PersonaId=0;
 String NombrePersona="";
 String Telefono="";
 if(PersonaEdit!=null){
-	PersonaId=String.valueOf(PersonaEdit.getIdPerson());
+	PersonaId=PersonaEdit.getIdPerson();
 	NombrePersona=PersonaEdit.getNamePerson();
 	Telefono=PersonaEdit.getTelephonePerson();
 }%>

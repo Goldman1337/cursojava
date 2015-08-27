@@ -10,13 +10,13 @@
 <body>
 <h1>Nuevo/Editar</h1>
 <% Comic ComicEdit =(Comic) request.getAttribute("comic");
-String ComicId="";
+Integer ComicId=0;
 String NombreComic="";
 String Compañia="";
 int Cantidad=0;
 String Review="";
 if(ComicEdit!=null){
-	ComicId=String.valueOf(ComicEdit.getIdComic());
+	ComicId=ComicEdit.getIdComic();
 	NombreComic=ComicEdit.getNameComic();
 	Compañia=ComicEdit.getCompanyComic();
 	Cantidad=ComicEdit.getQuantityComic();

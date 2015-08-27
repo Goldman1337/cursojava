@@ -69,15 +69,15 @@ public class ComicServlet extends HttpServlet {
 		com.setCompanyComic(request.getParameter("Comp"));
 		com.setQuantityComic(CantComic);
 		com.setReviewComic(request.getParameter("Review"));
-		String Comicid = request.getParameter("ComicId");
+		Integer Comicid = Integer.parseInt(request.getParameter("ComicId"));
 		
 		 if (messages.isEmpty()) {
-			 if(Comicid==null||Comicid.isEmpty()){
+			 if(Comicid==null||Comicid==0){
 					dao.add(com);
 				}
 				else
 				{
-					com.setIdComic(Integer.parseInt(Comicid));
+					com.setIdComic(Comicid);
 					dao.update(com);
 				}
 				request.setAttribute("messages", messages);
@@ -85,7 +85,7 @@ public class ComicServlet extends HttpServlet {
 				request.setAttribute("comics",dao.getAll());
 				view.forward(request,response);
 		    }else{
-		    	com.setIdComic(Integer.parseInt(Comicid));
+		    	com.setIdComic(Comicid);
 				request.setAttribute("comic",com);
 		        request.setAttribute("messages", messages);
 //		        response.sendRedirect("EditarComic.jsp?ComicId="+Comicid);
