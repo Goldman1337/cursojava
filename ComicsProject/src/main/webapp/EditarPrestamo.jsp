@@ -15,13 +15,13 @@
 String PrestamoId ="";
 List<Person> listaPersona = new personController().getAll();
 List<Comic> listaComic = new comicController().getAll();
-String ComicId="";
-String PersonaId="";
+Integer ComicId=0;
+Integer PersonaId=0;
 String FechaPrestamo = "";
 if(PrestamoEdit!=null){
 	PrestamoId=String.valueOf(PrestamoEdit.getIdLoan());
-	PersonaId=String.valueOf(PrestamoEdit.getPerson());
-	ComicId=String.valueOf(PrestamoEdit.getComic().getIdComic());
+	PersonaId=PrestamoEdit.getPerson().getIdPerson();
+	ComicId=PrestamoEdit.getComic().getIdComic();
 	FechaPrestamo=PrestamoEdit.getDate();
 }%>
 <form method="POST" action="LoanServlet" name="frmAddPrestamo">
@@ -29,21 +29,23 @@ if(PrestamoEdit!=null){
 Persona:<br>
 <select name="PersonId">
 <%for(Person per : listaPersona){%>
-	<option value="<%=per.getIdPerson()%>" > <%=per.getNamePerson() %></option>
-<%} %>
+ 	<%if(per.getIdPerson()==PersonaId){%>
+ 	<option value="<%=per.getIdPerson()%>" selected> <%=per.getNamePerson() %></option>
+ 	<%}else{%>
+	<option value="<%=per.getIdPerson()%>"> <%=per.getNamePerson() %></option>
+	<%} %>
+	<%} %>
 </select><br>
-<!--<input type="Text" name="Nombre" value=""><br> -->
 Comic:<br>
 <select name="ComicId">
 	<%for(Comic com : listaComic){%>
- 	<%if(String.valueOf(com.getIdComic())==ComicId){%>
+ 	<%if(com.getIdComic()==ComicId){%>
  	<option value="<%=com.getIdComic()%>" selected> <%=com.getNameComic() %></option>
  	<%}else{%>
 	<option value="<%=com.getIdComic()%>"> <%=com.getNameComic() %></option>
 	<%} %>
 	<%} %>
 </select><br>
-<!-- <input type="Text" name="Tel" value=""><br> -->
 Fecha:<br><input required type="date" name="Date" value="<%=FechaPrestamo %>"><br>
 <br><input type="submit" value="Submit">
 </form>

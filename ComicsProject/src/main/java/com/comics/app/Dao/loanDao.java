@@ -14,9 +14,8 @@ public class loanDao implements genericDao<Loan> {
 
 	private final String SQL_INSERT = "INSERT INTO loans (Persons_idPerson, Comics_idComic, date) VALUES (?, ?, ?)";
 	private final String SQL_UPDATE = "UPDATE loans SET Persons_idPerson = ?, Comics_idComic = ?, date = ? WHERE idLoan = ? ";
-	private final String SQL_GET_ALL = "select idLoan, c.idComic, c.nameComic,p.idPerson, p.namePerson, l.date from  loans l join comics c on l.Comics_idComic = c.idComic join persons p on l.Persons_idPerson = p.idPerson ";
+	private final String SQL_GET_ALL = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic inner join comics.persons as p on p.idPerson = loans.Persons_idPerson";
 	private final String SQL_DELETE = "DELETE FROM loans WHERE idLoan = ?";
-//	private final String SQL_GET = "select idLoan,c.idComic, c.nameComic,p.idPerson, p.namePerson, l.date from  loans l join comics c on l.Comics_idComic = c.idComic join persons p on l.Persons_idPerson = p.idPerson WHERE ( idLoan = ?)";
 	private final String SQL_GET = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic inner join comics.persons as p on p.idPerson = loans.Persons_idPerson WHERE ( idLoan = ?)";
 	private final connectionDB conn = connectionDB.getConnection();
 	
@@ -124,7 +123,7 @@ PreparedStatement ps;
 	 	ResultSet res;
 	 	 
 	 	ps = conn.getConn().prepareStatement(SQL_GET);
-	 	ps.setInt(1, (int)key);
+	 	ps.setInt(1, (Integer)key);
 	 	 
 	 	res = ps.executeQuery();
 	 	while(res.next()) {
@@ -164,19 +163,21 @@ PreparedStatement ps;
 			
 			while(res.next()) {
 				Loan l = new Loan();
-			 	Comic c = new Comic();
-			 	Person p = new Person();
-			 	l.setIdLoan(res.getInt("idLoan"));
-			 	l.setDate(res.getString("date"));
-			 	c.setNameComic(res.getString("c.nameComic"));
-			 	c.setIdComic(res.getInt("Comics_idComic"));
-			 	c.setQuantityComic(res.getInt("c.quantityComic"));
-			 	c.setReviewComic(res.getString("c.reviewComic"));
-			 	l.setComic(c);
-			 	p.setNamePerson(res.getString("p.namePerson"));
-			 	p.setIdPerson(res.getInt("Persons_idPerson"));
-			 	p.setTelephonePerson(res.getString("p.telephonePerson"));
-			 	l.setPerson(p);
+				Comic c = new Comic();
+				Person p = new Person();
+				
+				l.setIdLoan(res.getInt("idLoan"));
+				l.setDate(res.getString("date"));
+				c.setNameComic(res.getString("c.nameComic"));
+				c.setIdComic(res.getInt("Comics_idComic"));
+				c.setQuantityComic(res.getInt("c.quantityComic"));
+				c.setReviewComic(res.getString("c.reviewComic"));
+				l.setComic(c);
+				p.setNamePerson(res.getString("p.namePerson"));
+				p.setIdPerson(res.getInt("Persons_idPerson"));
+				p.setTelephonePerson(res.getString("p.telephonePerson"));
+				l.setPerson(p);
+				
 				list.add(l);
 			}
 			
