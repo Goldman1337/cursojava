@@ -58,21 +58,44 @@ public class PersonServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String messages = "";
 		Person per = new Person();
-		per.setNamePerson(request.getParameter("Nombre"));
-		per.setTelephonePerson(request.getParameter("Tel"));
+		String Nombre =request.getParameter("Nombre");
+		String Telefono = request.getParameter("Tel");
+		if(!Nombre.isEmpty()){
+			if(!Nombre.matches("[a-zA-Z]+")){
+				messages="El nombre solo puede tener letras";
+			}
+		}
+		if(!Telefono.isEmpty()){
+			if(!Telefono.matches("[0-9]+")){
+			messages="El telefono solo puede tener numeros";
+			}
+		}
+		per.setNamePerson(Nombre);
+		per.setTelephonePerson(Telefono);
 		String Personid = request.getParameter("PersonId");
-		if(Personid==null||Personid.isEmpty()){
-			dao.add(per);
-		}
-		else
-		{
+		
+		if (messages.isEmpty()) {
+			if(Personid==null||Personid.isEmpty()){
+				dao.add(per);
+			}
+			else
+			{
+				per.setIdPerson(Integer.parseInt(Personid));
+				dao.update(per);
+			}
+			request.setAttribute("messages", messages);
+			RequestDispatcher view =request.getRequestDispatcher(LIST_PERSON);
+			request.setAttribute("persons",dao.getAll());
+			view.forward(request,response);
+		}else{
 			per.setIdPerson(Integer.parseInt(Personid));
-			dao.update(per);
+			request.setAttribute("person",per);
+	        request.setAttribute("messages", messages);
+	        request.getRequestDispatcher("EditarPersona.jsp?PersonId="+Personid).forward(request, response); 
 		}
-		RequestDispatcher view =request.getRequestDispatcher(LIST_PERSON);
-		request.setAttribute("persons",dao.getAll());
-		view.forward(request,response);
+		
 	}
 
 }

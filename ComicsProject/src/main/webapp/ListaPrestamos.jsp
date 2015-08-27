@@ -33,6 +33,7 @@ for(Loan loan : Lista){
 </tbody>
 </table>
 <p><a href="LoanServlet?action=insert">Agregar Prestamo</a></p>
-<img alt="En Construccion" src="http://www.iebosquesdepinares.edu.co/PAGINA.jpg" width="400">
+<br>
+<br><a href="Index.jsp">Inicio</a>
 </body>
 </html>

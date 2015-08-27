@@ -29,6 +29,14 @@ Compañia:<br><input type="Text" name="Comp" value="<%=Compañia %>"><br>
 Cantidad: <br><input required type="Number" name="Cantidad" value ="<%=Cantidad %>"><br>
 Review: <br><textarea rows="4" cols="50" name="Review"><%=Review%></textarea>
 <br><input type="submit" value="Submit">
+<%String messages="";
+if(request.getAttribute("messages")!=null){
+messages=request.getAttribute("messages").toString();	
+}
+%>
+<br><span><%=messages  %></span>
+<br>
+<br><a href="ComicServlet?action=listComic">Volver</a>
 </form>
 </body>
 </html>

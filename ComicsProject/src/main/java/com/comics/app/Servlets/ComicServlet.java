@@ -1,6 +1,7 @@
 package com.comics.app.Servlets;
 
 import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,23 +59,39 @@ public class ComicServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String messages = "";
 		Comic com = new Comic();
+		Integer CantComic = Integer.parseInt(request.getParameter("Cantidad"));
+		if(CantComic<0){
+			messages="La cantidad debe ser mayor a 0";
+		}
 		com.setNameComic(request.getParameter("Nombre"));
 		com.setCompanyComic(request.getParameter("Comp"));
-		com.setQuantityComic(Integer.parseInt(request.getParameter("Cantidad")));
+		com.setQuantityComic(CantComic);
 		com.setReviewComic(request.getParameter("Review"));
 		String Comicid = request.getParameter("ComicId");
-		if(Comicid==null||Comicid.isEmpty()){
-			dao.add(com);
-		}
-		else
-		{
-			com.setIdComic(Integer.parseInt(Comicid));
-			dao.update(com);
-		}
-		RequestDispatcher view =request.getRequestDispatcher(LIST_COMIC);
-		request.setAttribute("comics",dao.getAll());
-		view.forward(request,response);
+		
+		 if (messages.isEmpty()) {
+			 if(Comicid==null||Comicid.isEmpty()){
+					dao.add(com);
+				}
+				else
+				{
+					com.setIdComic(Integer.parseInt(Comicid));
+					dao.update(com);
+				}
+				request.setAttribute("messages", messages);
+		        RequestDispatcher view =request.getRequestDispatcher(LIST_COMIC);
+				request.setAttribute("comics",dao.getAll());
+				view.forward(request,response);
+		    }else{
+		    	com.setIdComic(Integer.parseInt(Comicid));
+				request.setAttribute("comic",com);
+		        request.setAttribute("messages", messages);
+//		        response.sendRedirect("EditarComic.jsp?ComicId="+Comicid);
+		        request.getRequestDispatcher("EditarComic.jsp?ComicId="+Comicid).forward(request, response); 
+		    } 
+		
 	}
 
 }

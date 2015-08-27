@@ -48,6 +48,14 @@ Comic:<br>
 </select><br>
 Fecha:<br><input required type="date" name="Date" value="<%=FechaPrestamo %>"><br>
 <br><input type="submit" value="Submit">
+<%String messages="";
+if(request.getAttribute("messages")!=null){
+messages=request.getAttribute("messages").toString();	
+}
+%>
+<br><span><%=messages  %></span>
+<br>
+<br><a href="LoanServlet?action=listLoan">Volver</a>
 </form>
 </body>
 </html>

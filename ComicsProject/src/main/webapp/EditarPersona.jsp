@@ -23,6 +23,14 @@ if(PersonaEdit!=null){
 Nombre:<br><input required type="Text" name="Nombre" value="<%=NombrePersona%>"><br>
 Telefono:<br><input type="Text" name="Tel" value="<%=Telefono %>"><br>
 <br><input type="submit" value="Submit">
+<%String messages="";
+if(request.getAttribute("messages")!=null){
+messages=request.getAttribute("messages").toString();	
+}
+%>
+<br><span><%=messages  %></span>
+<br>
+<br><a href="PersonServlet?action=listPerson">Volver</a>
 </form>
 </body>
 </html>
