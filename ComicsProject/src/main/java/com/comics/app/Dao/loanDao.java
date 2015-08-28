@@ -14,9 +14,15 @@ public class loanDao implements genericDao<Loan> {
 
 	private final String SQL_INSERT = "INSERT INTO loans (Persons_idPerson, Comics_idComic, date) VALUES (?, ?, ?)";
 	private final String SQL_UPDATE = "UPDATE loans SET Persons_idPerson = ?, Comics_idComic = ?, date = ? WHERE idLoan = ? ";
-	private final String SQL_GET_ALL = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic inner join comics.persons as p on p.idPerson = loans.Persons_idPerson";
+	private final String SQL_GET_ALL = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,"
+			+ "c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson "
+			+ "FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic "
+			+ "inner join comics.persons as p on p.idPerson = loans.Persons_idPerson";
 	private final String SQL_DELETE = "DELETE FROM loans WHERE idLoan = ?";
-	private final String SQL_GET = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic inner join comics.persons as p on p.idPerson = loans.Persons_idPerson WHERE ( idLoan = ?)";
+	private final String SQL_GET = "SELECT idLoan,c.nameComic,date, Persons_idPerson,c.companyComic,"
+			+ "c.reviewComic,c.quantityComic,Comics_idComic ,p.namePerson,p.telephonePerson "
+			+ "FROM comics.loans inner join comics.comics as c on c.idComic=loans.Comics_idComic "
+			+ "inner join comics.persons as p on p.idPerson = loans.Persons_idPerson WHERE ( idLoan = ?)";
 	private final connectionDB conn = connectionDB.getConnection();
 	
 	public boolean add(Loan c) {

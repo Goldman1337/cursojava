@@ -31,6 +31,12 @@ messages=request.getAttribute("messages").toString();
 <br><span><%=messages  %></span>
 <br>
 <br><a href="PersonServlet?action=listPerson">Volver</a>
+<br>
+<br>
+<%Usuario UsLog = (Usuario) session.getAttribute("UsuarioLog");
+if(UsLog!=null){ %>
+<a href="LoginServlet?action=salir">salir</a>
+<%} %>
 </form>
 </body>
 </html>

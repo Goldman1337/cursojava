@@ -7,9 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.comics.app.Controller.*;
 import com.comics.app.Model.Person;
+import com.comics.app.Model.Usuario;
 
 /**
  * Servlet implementation class PersonServlet
@@ -17,85 +19,108 @@ import com.comics.app.Model.Person;
 @WebServlet("/PersonServlet")
 public class PersonServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static String INSERT_OR_EDIT="/EditarPersona.jsp";
-	private static String LIST_PERSON="/ListaPersonas.jsp";
+	private static String INSERT_OR_EDIT = "/EditarPersona.jsp";
+	private static String LIST_PERSON = "/ListaPersonas.jsp";
 	private personController dao;
-    /**
-     * Default constructor. 
-     */
-    public PersonServlet() {
-        dao=new personController();
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Default constructor.
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String forward="";
-		String action = request.getParameter("action");
-		
-		if(action.equalsIgnoreCase("delete")){
-			int PersonId = Integer.parseInt(request.getParameter("PersonId"));
-			dao.delete(PersonId);
-			forward=LIST_PERSON;
-			request.setAttribute("persons",dao.getAll());
-		} else if (action.equalsIgnoreCase("edit")){
-			forward=INSERT_OR_EDIT;
-			int PersonId = Integer.parseInt(request.getParameter("PersonId"));
-			Person per = dao.get(PersonId);
-			request.setAttribute("person",per);
-		} else if(action.equalsIgnoreCase("listPerson")){
-			forward=LIST_PERSON;
-			request.setAttribute("persons",dao.getAll());
-		} else{
-			forward=INSERT_OR_EDIT;
-		}
-		RequestDispatcher view = request.getRequestDispatcher(forward);
-		view.forward(request,response);
+	public PersonServlet() {
+		dao = new personController();
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String messages = "";
-		Person per = new Person();
-		String Nombre =request.getParameter("Nombre");
-		String Telefono = request.getParameter("Tel");
-		if(!Nombre.isEmpty()){
-			if(!Nombre.matches("[a-zA-Z]+")){
-				messages="El nombre solo puede tener letras";
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String forward = "";
+		String action = request.getParameter("action");
+		HttpSession s = request.getSession();
+		Usuario UsLog = (Usuario) s.getAttribute("UsuarioLog");
+		boolean Redireccionar = false;
+
+		if (action.equalsIgnoreCase("delete")) {
+			if (UsLog != null && UsLog.getRole().getPersonDelete()) {
+				int PersonId = Integer.parseInt(request.getParameter("PersonId"));
+				dao.delete(PersonId);
+				forward = LIST_PERSON;
+				request.setAttribute("persons", dao.getAll());
+			} else {
+				Redireccionar = true;
+			}
+		} else if (action.equalsIgnoreCase("edit")) {
+			if (UsLog != null && UsLog.getRole().getPersonEdit()) {
+				forward = INSERT_OR_EDIT;
+				int PersonId = Integer.parseInt(request.getParameter("PersonId"));
+				Person per = dao.get(PersonId);
+				request.setAttribute("person", per);
+			} else {
+				Redireccionar = true;
+			}
+		} else if (action.equalsIgnoreCase("listPerson")) {
+			forward = LIST_PERSON;
+			request.setAttribute("persons", dao.getAll());
+		} else {
+			if (UsLog != null && UsLog.getRole().getPersonAdd()) {
+				forward = INSERT_OR_EDIT;
+			} else {
+				Redireccionar = true;
 			}
 		}
-		if(!Telefono.isEmpty()){
-			if(!Telefono.matches("[0-9]+")){
-			messages="El telefono solo puede tener numeros";
+		if (Redireccionar == false) {
+			RequestDispatcher view = request.getRequestDispatcher(forward);
+			view.forward(request, response);
+		} else {
+			s.invalidate();
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String messages = "";
+		Person per = new Person();
+		String Nombre = request.getParameter("Nombre");
+		String Telefono = request.getParameter("Tel");
+		if (!Nombre.isEmpty()) {
+			if (!Nombre.matches("[a-zA-Z]+")) {
+				messages = "El nombre solo puede tener letras";
+			}
+		}
+		if (!Telefono.isEmpty()) {
+			if (!Telefono.matches("[0-9]+")) {
+				messages = "El telefono solo puede tener numeros";
 			}
 		}
 		per.setNamePerson(Nombre);
 		per.setTelephonePerson(Telefono);
 		Integer Personid = Integer.parseInt(request.getParameter("PersonId"));
-		
+
 		if (messages.isEmpty()) {
-			if(Personid==null||Personid==0){
+			if (Personid == null || Personid == 0) {
 				dao.add(per);
-			}
-			else
-			{
+			} else {
 				per.setIdPerson(Personid);
 				dao.update(per);
 			}
 			request.setAttribute("messages", messages);
-			RequestDispatcher view =request.getRequestDispatcher(LIST_PERSON);
-			request.setAttribute("persons",dao.getAll());
-			view.forward(request,response);
-		}else{
+			RequestDispatcher view = request.getRequestDispatcher(LIST_PERSON);
+			request.setAttribute("persons", dao.getAll());
+			view.forward(request, response);
+		} else {
 			per.setIdPerson(Personid);
-			request.setAttribute("person",per);
-	        request.setAttribute("messages", messages);
-	        request.getRequestDispatcher("EditarPersona.jsp?PersonId="+Personid).forward(request, response); 
+			request.setAttribute("person", per);
+			request.setAttribute("messages", messages);
+			request.getRequestDispatcher("EditarPersona.jsp?PersonId=" + Personid).forward(request, response);
 		}
-		
+
 	}
 
 }

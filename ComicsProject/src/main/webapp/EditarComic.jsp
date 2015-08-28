@@ -9,7 +9,8 @@
 </head>
 <body>
 <h1>Nuevo/Editar</h1>
-<% Comic ComicEdit =(Comic) request.getAttribute("comic");
+<%
+Comic ComicEdit =(Comic) request.getAttribute("comic");
 Integer ComicId=0;
 String NombreComic="";
 String Compañia="";
@@ -37,6 +38,12 @@ messages=request.getAttribute("messages").toString();
 <br><span><%=messages  %></span>
 <br>
 <br><a href="ComicServlet?action=listComic">Volver</a>
+<br>
+<br>
+<%Usuario UsLog = (Usuario) session.getAttribute("UsuarioLog");
+if(UsLog!=null){ %>
+<a href="LoginServlet?action=salir">salir</a>
+<%} %>
 </form>
 </body>
 </html>

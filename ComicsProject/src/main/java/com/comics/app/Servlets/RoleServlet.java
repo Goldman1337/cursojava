@@ -60,8 +60,12 @@ public class RoleServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Role rol = new Role();
-		
-		rol.setNameRole(request.getParameter("Nombre"));
+		String messages = "";
+		String Nombre=request.getParameter("Nombre");
+		if(Nombre.equalsIgnoreCase("ADMIN")){
+			messages="No puede agregar otro administrador";
+		}
+		rol.setNameRole(Nombre);
 		rol.setComicAdd(Boolean.valueOf(request.getParameter("ComicAdd")));
 		rol.setComicEdit(Boolean.valueOf(request.getParameter("ComicEdit")));
 		rol.setComicDelete(Boolean.valueOf(request.getParameter("ComicDelete")));
@@ -72,19 +76,24 @@ public class RoleServlet extends HttpServlet {
 		rol.setLoanEdit(Boolean.valueOf(request.getParameter("LoanEdit")));
 		rol.setLoanDelete(Boolean.valueOf(request.getParameter("LoanDelete")));
 		Integer Roleid = Integer.parseInt(request.getParameter("RoleId"));
-		
-			 if(Roleid==null||Roleid==0){
-					dao.addRole(rol);
-				}
-				else
-				{
-					rol.setIdRole(Roleid);
-					dao.update(rol);
-				}
-		        RequestDispatcher view =request.getRequestDispatcher(LIST_COMIC);
-				request.setAttribute("roles",dao.getAll());
-				view.forward(request,response);
-		
+		if (messages.isEmpty()) {
+			if(Roleid==null||Roleid==0){
+				dao.addRole(rol);
+			}
+			else
+			{
+				rol.setIdRole(Roleid);
+				dao.update(rol);
+			}
+			request.setAttribute("messages", messages);
+	        RequestDispatcher view =request.getRequestDispatcher(LIST_COMIC);
+			request.setAttribute("roles",dao.getAll());
+			view.forward(request,response);
+		}else{
+			rol.setIdRole(Roleid);
+			request.setAttribute("role",rol);
+	        request.setAttribute("messages", messages);
+	        request.getRequestDispatcher("EditarRol.jsp?RoleId="+Roleid).forward(request, response); 
+		}
 	}
-
 }

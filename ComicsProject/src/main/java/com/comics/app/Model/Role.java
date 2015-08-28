@@ -29,7 +29,7 @@ public class Role {
 		return Name;
 	}
 	
-	public void setNameRole(String idRole) {
+	public void setNameRole(String Name) {
 		this.Name = Name;
 	}
 	

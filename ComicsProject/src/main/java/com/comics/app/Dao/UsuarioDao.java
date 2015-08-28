@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.catalina.User;
-
 import com.comics.app.Model.Role;
 import com.comics.app.Model.Usuario;
 
@@ -15,10 +13,15 @@ public class UsuarioDao implements genericDao<Usuario> {
 	
 	// SQL CRUD Statements.
 	private final String SQL_INSERT = "INSERT INTO users (UserName, Password,Roleid) VALUES (?, ?,?)";
-	private final String SQL_UPDATE = "UPDATE users SET UserName = ?, Password = ? Roleid=? WHERE idUsers = ? ";
+	private final String SQL_UPDATE = "UPDATE users SET UserName = ?, Password = ?, Roleid=? WHERE idUsers = ? ";
 	private final String SQL_DELETE = "DELETE FROM users WHERE idUsers = ?";
-	private final String SQL_GET_ALL = "SELECT * FROM users";
-	private final String SQL_GET = "SELECT * FROM users WHERE ( idUsers = ?)";
+	private final String SQL_GET_ALL = "SELECT idUsers,UserName,Password,Roleid,r.Name,r.ComicAdd,"
+			+ "r.ComicEdit,r.ComicDelete,r.PersonAdd,r.PersonEdit,r.PersonDelete,r.LoanAdd,"
+			+ "r.LoanEdit,r.LoanDelete FROM comics.users inner join comics.roles as r on r.idroles=users.Roleid";
+	private final String SQL_GET = "SELECT idUsers,UserName,Password,Roleid,r.Name,r.ComicAdd,"
+			+ "r.ComicEdit,r.ComicDelete,r.PersonAdd,r.PersonEdit,r.PersonDelete,r.LoanAdd,"
+			+ "r.LoanEdit,r.LoanDelete FROM comics.users inner join comics.roles as r on r.idroles=users.Roleid"
+			+ " WHERE ( idUsers = ?)";
 	
 	private final connectionDB conn = connectionDB.getConnection();
 	
@@ -98,10 +101,10 @@ public class UsuarioDao implements genericDao<Usuario> {
 			res = ps.executeQuery();
 			while(res.next()) {
 				Role r = new Role();
-				p.setIdUser(res.getInt("idUser"));
+				p.setIdUser(res.getInt("idUsers"));
 				p.setUserName(res.getString("UserName"));
 				p.setPassword(res.getString("Password"));
-				r.setIdRole(res.getInt("idRole"));
+				r.setIdRole(res.getInt("Roleid"));
 				r.setNameRole(res.getString("Name"));
 				r.setComicAdd(res.getBoolean("ComicAdd"));
 				r.setComicEdit(res.getBoolean("ComicEdit"));
@@ -136,10 +139,10 @@ public class UsuarioDao implements genericDao<Usuario> {
 			while(res.next()) {
 				Usuario p = new Usuario();
 				Role r = new Role();
-				p.setIdUser(res.getInt("idUser"));
+				p.setIdUser(res.getInt("idUsers"));
 				p.setUserName(res.getString("UserName"));
 				p.setPassword(res.getString("Password"));
-				r.setIdRole(res.getInt("idRole"));
+				r.setIdRole(res.getInt("Roleid"));
 				r.setNameRole(res.getString("Name"));
 				r.setComicAdd(res.getBoolean("ComicAdd"));
 				r.setComicEdit(res.getBoolean("ComicEdit"));
