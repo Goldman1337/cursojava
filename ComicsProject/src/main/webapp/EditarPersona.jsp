@@ -20,8 +20,8 @@ if(PersonaEdit!=null){
 }%>
 <form method="POST" action="PersonServlet" name="frmAddPerson">
 <input type="Hidden" name="PersonId" value="<%=PersonaId %>">
-Nombre:<br><input required type="Text" name="Nombre" value="<%=NombrePersona%>"><br>
-Telefono:<br><input type="Text" name="Tel" value="<%=Telefono %>"><br>
+Nombre:<br><input required type="Text" maxlength="45" name="Nombre" value="<%=NombrePersona%>"><br>
+Telefono:<br><input type="Text" maxlength="45" name="Tel" value="<%=Telefono %>"><br>
 <br><input type="submit" value="Submit">
 <%String messages="";
 if(request.getAttribute("messages")!=null){

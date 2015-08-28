@@ -39,7 +39,7 @@
 	<form method="POST" action="RoleServlet" name="frmAddRol">
 		<input type="Hidden" name="RoleId" value="<%=RolId%>">
 		Nombre:<br>
-		<input required type="Text" name="Nombre" value="<%=NombreRol%>"><br>
+		<input required type="Text" maxlength="45" name="Nombre" value="<%=NombreRol%>"><br>
 		<input type="checkbox" name="ComicAdd" value="true" <%if (ComicAdd) {%>
 			checked <%}%>>Puede Agregar Comics?<br> <input
 			type="checkbox" name="ComicEdit" value="true" <%if (ComicEdit) {%>

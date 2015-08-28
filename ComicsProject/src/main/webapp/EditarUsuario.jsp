@@ -25,8 +25,8 @@ if(UsuarioEdit!=null){
 }%>
 <form method="POST" action="UsuarioServlet" name="frmAddUsuario">
 <input type="Hidden" name="UsuarioId" value="<%=UsuarioId %>">
-Nombre de usuario:<br><input required type="Text" name="UserName" value="<%=UserName %>"><br>
-Contraseña:<br><input required type="Text" name="Pass" value="<%=Password %>"><br>
+Nombre de usuario:<br><input required type="Text" maxlength="45" name="UserName" value="<%=UserName %>"><br>
+Contraseña:<br><input required type="Text" maxlength="45" name="Pass" value="<%=Password %>"><br>
 Rol:<br>
 <select name="RoleId">
 	<%for(Role rol : listaRole){%>
