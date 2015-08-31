@@ -38,24 +38,45 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String forward = "";
 		String action = request.getParameter("action");
+		boolean Redir=false;
+		
 		if (action.equalsIgnoreCase("delete")) {
-			int UsuarioId = Integer.parseInt(request.getParameter("UsuarioId"));
-			dao.delete(UsuarioId);
-			forward = LIST_PERSON;
-			request.setAttribute("usuarios", dao.getAll());
+			try {
+				int UsuarioId = Integer.parseInt(request.getParameter("UsuarioId"));
+				if(dao.delete(UsuarioId)){
+				forward = LIST_PERSON;
+				request.setAttribute("usuarios", dao.getAll());
+				}else{
+					Redir=true;
+				}
+			} catch (Exception e) {
+				Redir=true;
+			}
 		} else if (action.equalsIgnoreCase("edit")) {
-			forward = INSERT_OR_EDIT;
-			int UsuarioId = Integer.parseInt(request.getParameter("UsuarioId"));
-			Usuario us = dao.get(UsuarioId);
-			request.setAttribute("usuario", us);
+			try {
+				forward = INSERT_OR_EDIT;
+				int UsuarioId = Integer.parseInt(request.getParameter("UsuarioId"));
+				Usuario us = dao.get(UsuarioId);
+				if(us.getIdUser()>0){
+					request.setAttribute("usuario", us);
+				}else{
+					Redir=true;
+				}
+			} catch (Exception e) {
+				Redir=true;
+			}
 		} else if (action.equalsIgnoreCase("listUsuario")) {
 			forward = LIST_PERSON;
 			request.setAttribute("usuarios", dao.getAll());
 		} else {
 			forward = INSERT_OR_EDIT;
 		}
-		RequestDispatcher view = request.getRequestDispatcher(forward);
-		view.forward(request, response);
+		if(Redir==false){
+			RequestDispatcher view = request.getRequestDispatcher(forward);
+			view.forward(request, response);
+		}else{
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+		}
 	}
 
 	/**
@@ -66,36 +87,34 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String messages = "";
 		Usuario us = new Usuario();
-		String UsuarioNombre=request.getParameter("UserName");
-		String Pass=request.getParameter("Pass");
-		Role RoleLoan= new RoleController().get(Integer.parseInt(request.getParameter("RoleId")));
+		String UsuarioNombre = request.getParameter("UserName");
+		String Pass = request.getParameter("Pass");
+		Role RoleLoan = new RoleController().get(Integer.parseInt(request.getParameter("RoleId")));
 
 		us.setUserName(UsuarioNombre);
 		us.setPassword(Pass);
 		us.setRole(RoleLoan);
 		Integer Usuarioid = Integer.parseInt(request.getParameter("UsuarioId"));
-		if(new UsuarioController().getAll().stream()
-				.anyMatch(x->x.getUserName().equals(UsuarioNombre) && x.getIdUser()!=Usuarioid)){
-			messages="El nombre de usuario esta en uso, elija otro";
+		if (new UsuarioController().getAll().stream()
+				.anyMatch(x -> x.getUserName().equals(UsuarioNombre) && x.getIdUser() != Usuarioid)) {
+			messages = "El nombre de usuario esta en uso, elija otro";
 		}
 		if (messages.isEmpty()) {
-			if(Usuarioid==null||Usuarioid==0){
+			if (Usuarioid == null || Usuarioid == 0) {
 				dao.addUsuario(us);
-			}
-			else
-			{
+			} else {
 				us.setIdUser(Usuarioid);
 				dao.update(us);
 			}
 			request.setAttribute("messages", messages);
-			RequestDispatcher view =request.getRequestDispatcher(LIST_PERSON);
-			request.setAttribute("usuarios",dao.getAll());
-			view.forward(request,response);
-		}else{
+			RequestDispatcher view = request.getRequestDispatcher(LIST_PERSON);
+			request.setAttribute("usuarios", dao.getAll());
+			view.forward(request, response);
+		} else {
 			us.setIdUser(Usuarioid);
-			request.setAttribute("usuario",us);
-	        request.setAttribute("messages", messages);
-	        request.getRequestDispatcher("EditarUsuario.jsp?UsuarioId="+Usuarioid).forward(request, response); 
+			request.setAttribute("usuario", us);
+			request.setAttribute("messages", messages);
+			request.getRequestDispatcher("EditarUsuario.jsp?UsuarioId=" + Usuarioid).forward(request, response);
 		}
 	}
 

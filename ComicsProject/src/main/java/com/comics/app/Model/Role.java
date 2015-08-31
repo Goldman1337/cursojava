@@ -82,7 +82,7 @@ public class Role {
 	}
 	
 	public boolean getLoanAdd() {
-		return PersonAdd;
+		return LoanAdd;
 	}
 	
 	public void setLoanAdd(boolean LoanAdd) {

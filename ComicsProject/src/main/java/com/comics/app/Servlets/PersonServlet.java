@@ -44,19 +44,34 @@ public class PersonServlet extends HttpServlet {
 
 		if (action.equalsIgnoreCase("delete")) {
 			if (UsLog != null && UsLog.getRole().getPersonDelete()) {
-				int PersonId = Integer.parseInt(request.getParameter("PersonId"));
-				dao.delete(PersonId);
-				forward = LIST_PERSON;
-				request.setAttribute("persons", dao.getAll());
+				try {
+					int PersonId = Integer.parseInt(request.getParameter("PersonId"));
+					if (dao.delete(PersonId)) {
+						forward = LIST_PERSON;
+						request.setAttribute("persons", dao.getAll());
+					} else {
+						Redireccionar = true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}
 		} else if (action.equalsIgnoreCase("edit")) {
 			if (UsLog != null && UsLog.getRole().getPersonEdit()) {
-				forward = INSERT_OR_EDIT;
-				int PersonId = Integer.parseInt(request.getParameter("PersonId"));
-				Person per = dao.get(PersonId);
-				request.setAttribute("person", per);
+				try {
+					forward = INSERT_OR_EDIT;
+					int PersonId = Integer.parseInt(request.getParameter("PersonId"));
+					Person per = dao.get(PersonId);
+					if (per.getIdPerson() > 0) {
+						request.setAttribute("person", per);
+					} else {
+						Redireccionar = true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}

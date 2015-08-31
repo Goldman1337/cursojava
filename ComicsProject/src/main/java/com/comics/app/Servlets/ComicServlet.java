@@ -42,22 +42,37 @@ public class ComicServlet extends HttpServlet {
 		HttpSession s = request.getSession();
 		Usuario UsLog = (Usuario) s.getAttribute("UsuarioLog");
 		boolean Redireccionar = false;
-		
+
 		if (action.equalsIgnoreCase("delete")) {
 			if (UsLog != null && UsLog.getRole().getComicDelete()) {
-				int ComicId = Integer.parseInt(request.getParameter("ComicId"));
-				dao.delete(ComicId);
-				forward = LIST_COMIC;
-				request.setAttribute("comics", dao.getAll());
+				try {
+					int ComicId = Integer.parseInt(request.getParameter("ComicId"));
+					if(dao.delete(ComicId)){
+						forward = LIST_COMIC;
+						request.setAttribute("comics", dao.getAll());	
+					}else{
+						Redireccionar=true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}
 		} else if (action.equalsIgnoreCase("edit")) {
 			if (UsLog != null && UsLog.getRole().getComicEdit()) {
-				forward = INSERT_OR_EDIT;
-				int ComicId = Integer.parseInt(request.getParameter("ComicId"));
-				Comic com = dao.get(ComicId);
-				request.setAttribute("comic", com);
+				try {
+					forward = INSERT_OR_EDIT;
+					int ComicId = Integer.parseInt(request.getParameter("ComicId"));
+					Comic com = dao.get(ComicId);
+					if(com.getIdComic()>0){
+						request.setAttribute("comic", com);	
+					}else{
+						Redireccionar=true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}

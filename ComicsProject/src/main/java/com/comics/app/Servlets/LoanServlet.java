@@ -47,19 +47,34 @@ public class LoanServlet extends HttpServlet {
 
 		if (action.equalsIgnoreCase("delete")) {
 			if (UsLog != null && UsLog.getRole().getLoanDelete()) {
-				int LoanId = Integer.parseInt(request.getParameter("LoanId"));
-				dao.delete(LoanId);
-				forward = LIST_LOAN;
-				request.setAttribute("loans", dao.getAll());
+				try {
+					int LoanId = Integer.parseInt(request.getParameter("LoanId"));
+					if(dao.delete(LoanId)){
+						forward = LIST_LOAN;
+						request.setAttribute("loans", dao.getAll());
+					}else{
+						Redireccionar = true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}
 		} else if (action.equalsIgnoreCase("edit")) {
 			if (UsLog != null && UsLog.getRole().getLoanEdit()) {
-				forward = INSERT_OR_EDIT;
-				int LoanId = Integer.parseInt(request.getParameter("LoanId"));
-				Loan loan = dao.get(LoanId);
-				request.setAttribute("loan", loan);
+				try {
+					forward = INSERT_OR_EDIT;
+					int LoanId = Integer.parseInt(request.getParameter("LoanId"));
+					Loan loan = dao.get(LoanId);
+					if(loan.getIdLoan()>0){
+						request.setAttribute("loan", loan);
+					}else{
+						Redireccionar = true;
+					}
+				} catch (Exception e) {
+					Redireccionar = true;
+				}
 			} else {
 				Redireccionar = true;
 			}
